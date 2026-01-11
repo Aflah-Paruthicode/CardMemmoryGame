@@ -1,15 +1,21 @@
-import React from 'react'
 
-interface CardInterface {
-  card : object,
-  onClick : (card : object) => {}
+interface CardsInterface {
+  id: number;
+  value: string | number;
+  isFlipped: boolean;
+  isMatched: boolean;
 }
 
-const Card = (props : CardInterface) => {
+interface CardInterface {
+  card : CardsInterface,
+  onClick : (card : CardsInterface) => void; 
+} 
+
+const Card = ({card,onClick} : CardInterface) => {
   return (
-    <div className={`card ${props.card.isFlipped ? "flipped" : "" } ${props.card.isMatched ? "matched" : "" }`} onClick={() => props.onClick(props.card)} >
+    <div className={`card ${card.isFlipped ? "flipped" : "" } ${card.isMatched ? "matched" : "" }`} onClick={() => onClick(card)} >
       <div className='card-front'> ? </div> 
-      <div className='card-back'> {props.card.value} </div>
+      <div className='card-back'> {card.value} </div>
     </div>
   )
 }

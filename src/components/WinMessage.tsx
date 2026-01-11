@@ -1,12 +1,11 @@
-import React from 'react'
 
-const WinMessage = (props : number) => {
+const WinMessage = ({moves}: {moves : number}) => {
   return (
-    <div className='win-message'>
-        <h2>Congratulations!</h2>
-        <p>You completed the game in {props.moves} moves!</p>
+    <div className="win-message">
+      <h2>Congratulations!</h2>
+      <p>You completed the game in {moves} moves!</p>
     </div>
-  )
-}
+  );
+};
 
-export default WinMessage
+export default WinMessage;

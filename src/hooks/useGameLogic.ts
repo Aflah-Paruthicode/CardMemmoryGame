@@ -2,33 +2,31 @@ import { useEffect, useState } from "react";
 
 interface CardsInterface {
   id: number;
-  value: string;
+  value: string | number;
   isFlipped: boolean;
   isMatched: boolean;
 }
 
-export const useGameLogic = (cardValues : string[]) => {
-      const [cards, setCards] = useState<CardsInterface[]>([]);
+export const useGameLogic = (cardValues: string[]) => {
+  const [cards, setCards] = useState<CardsInterface[]>([]);
   const [flippedCards, setFlippedCards] = useState<number[]>([]);
-  const [matchedCards, setMatchedCards] = useState<CardsInterface[]>([]);
+  const [matchedCards, setMatchedCards] = useState<number[]>([]);
   const [isLocked, setLocked] = useState<boolean>(false);
   const [score, setScore] = useState<number>(0);
   const [moves, setMoves] = useState<number>(0);
 
+  const shuffleArr = (arr: string[]): string[] => {
+    const shuffled: string[] = [...arr];
 
-  const shuffleArr = (arr : string[]) : string[] => {
-    const shuffled : string[] = [...arr];
-
-    for (let i:number = shuffled.length-1; i> 0 ;i--) {
-      const j:number = Math.floor(Math.random() * (i+1));
-      [shuffled[i],shuffled[j]] = [shuffled[j], shuffled[i]];
+    for (let i: number = shuffled.length - 1; i > 0; i--) {
+      const j: number = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
     return shuffled;
-  }
+  };
 
   const initializeGame = () => {
-
-    const shuffled = shuffleArr(cardValues)
+    const shuffled = shuffleArr(cardValues);
     const finalCards: CardsInterface[] = shuffled.map((value, index) => ({
       id: index,
       value,
@@ -49,7 +47,7 @@ export const useGameLogic = (cardValues : string[]) => {
     initializeGame();
   }, []);
 
-  const handleCardClick = (card: object) => {
+  const handleCardClick = (card: CardsInterface) => {
     if (card.isFlipped || card.isMatched || isLocked || flippedCards.length == 2) return;
 
     const newCards: CardsInterface[] = cards.map((c) => {
@@ -112,7 +110,6 @@ export const useGameLogic = (cardValues : string[]) => {
     moves,
     isGameComplete,
     initializeGame,
-    handleCardClick
-  }
-
-}
+    handleCardClick,
+  };
+};

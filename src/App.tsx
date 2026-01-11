@@ -3,24 +3,7 @@ import "./App.css";
 import Card from "./components/Card";
 import GameHeader from "./components/GameHeader";
 
-const cardValues: string[] = [
-  "🍎",
-  "🍌",
-  "🍇",
-  "🍊",
-  "🍓",
-  "🥝",
-  "🍑",
-  "🍒",
-  "🍎",
-  "🍌",
-  "🍇",
-  "🍊",
-  "🍓",
-  "🥝",
-  "🍑",
-  "🍒",
-];
+const cardValues: string[] = ["🍎", "🍌", "🍇", "🍊", "🍓", "🥝", "🍑", "🍒", "🍎", "🍌", "🍇", "🍊", "🍓", "🥝", "🍑", "🍒"];
 
 interface CardsInterface {
   id: number;
@@ -32,9 +15,10 @@ interface CardsInterface {
 function App() {
   const [cards, setCards] = useState<CardsInterface[]>([]);
   const [flippedCards, setFlippedCards] = useState<number[]>([]);
+  const [matchedCards, setMatchedCards] = useState<CardsInterface[]>([]);
 
   const initializeGame = () => {
-    const finalCards : CardsInterface[] = cardValues.map((value, index) => ({
+    const finalCards: CardsInterface[] = cardValues.map((value, index) => ({
       id: index,
       value,
       isFlipped: false,
@@ -54,7 +38,7 @@ function App() {
       return;
     }
 
-    const newCards : CardsInterface[] = cards.map((c) => {
+    const newCards: CardsInterface[] = cards.map((c) => {
       if (card.id == c.id) {
         return { ...c, isFlipped: true };
       } else {
@@ -71,17 +55,32 @@ function App() {
       const firstCard = cards[flippedCards[0]];
 
       if (firstCard.value == card.value) {
-        alert("Matched!!!");
+        setTimeout(() => {
+          setMatchedCards((prev) => [...prev, firstCard.id, card.id]);
+          setCards((prev) => 
+            prev.map((c) => {
+              if (c.id == card.id || c.id == firstCard.id) {
+                return { ...c, isMatched: true };
+              } else {
+                return c;
+              }
+            })
+          );
+          setFlippedCards([]);
+        }, 500);
       } else {
-        const flippedBackCard : CardsInterface[] = newCards.map((c) => {
-          if (newFlippedCards.includes(c.id || c.id == card.id)) {
-            return { ...c, isFlipped: false };
-          } else {
-            return c;
-          }
-        });
+        setTimeout(() => {
+          const flippedBackCard: CardsInterface[] = newCards.map((c) => {
+            if (newFlippedCards.includes(c.id) || c.id == card.id) {
+              return { ...c, isFlipped: false };
+            } else {
+              return c;
+            }
+          });
 
-        setCards(flippedBackCard)
+          setCards(flippedBackCard);
+          setFlippedCards([]);
+        }, 1000);
       }
     }
   };
@@ -89,11 +88,7 @@ function App() {
   return (
     <div className="app">
       <GameHeader score={3} moves={10} />
-      <div className="cards-grid">
-        {cards.map((card) => (
-          <Card card={card} onClick={handleCardClick} />
-        ))}{" "}
-      </div>
+      <div className="cards-grid">{cards && cards.map((card) => <Card card={card} onClick={handleCardClick} />)} </div>
     </div>
   );
 }

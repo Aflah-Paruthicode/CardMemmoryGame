@@ -1,5 +1,4 @@
-
-const WinMessage = ({moves}: {moves : number}) => {
+const WinMessage = ({ moves }: { moves: number }) => {
   return (
     <div className="win-message">
       <h2>Congratulations!</h2>

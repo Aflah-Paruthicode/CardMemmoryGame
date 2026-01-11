@@ -4,7 +4,7 @@ import GameHeader from "./components/GameHeader";
 import WinMessage from "./components/WinMessage";
 import { useGameLogic } from "./hooks/useGameLogic";
 
-const cardValues: string[] = ["🍎", "🍉", "🍍", "🍌", "🍇", "🍊", "🍓", "🥝", "🍑", "🍒", "🍎", "🍉","🍍", "🍌", "🍇", "🍊", "🍓", "🥝", "🍑", "🍒"];
+const cardValues: string[] = ["🍎", "🍉", "🍍", "🍌", "🍇", "🍊", "🍓", "🥝", "🍑", "🍒", "🍎", "🍉", "🍍", "🍌", "🍇", "🍊", "🍓", "🥝", "🍑", "🍒"];
 
 function App() {
   const { cards, handleCardClick, initializeGame, isGameComplete, moves, score } = useGameLogic(cardValues);

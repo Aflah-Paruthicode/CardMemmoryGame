@@ -35,7 +35,6 @@ export const useGameLogic = (cardValues: string[]) => {
     }));
 
     setCards(finalCards);
-
     setMoves(0);
     setScore(0);
     setLocked(false);
@@ -51,11 +50,8 @@ export const useGameLogic = (cardValues: string[]) => {
     if (card.isFlipped || card.isMatched || isLocked || flippedCards.length == 2) return;
 
     const newCards: CardsInterface[] = cards.map((c) => {
-      if (card.id == c.id) {
-        return { ...c, isFlipped: true };
-      } else {
-        return c;
-      }
+      if (card.id == c.id) return { ...c, isFlipped: true };
+      else return c;
     });
 
     setCards(newCards);
@@ -72,11 +68,8 @@ export const useGameLogic = (cardValues: string[]) => {
           setScore((prev) => prev + 1);
           setCards((prev) =>
             prev.map((c) => {
-              if (c.id == card.id || c.id == firstCard.id) {
-                return { ...c, isMatched: true };
-              } else {
-                return c;
-              }
+              if (c.id == card.id || c.id == firstCard.id) return { ...c, isMatched: true };
+              else return c;
             })
           );
           setFlippedCards([]);
@@ -85,11 +78,8 @@ export const useGameLogic = (cardValues: string[]) => {
       } else {
         setTimeout(() => {
           const flippedBackCard: CardsInterface[] = newCards.map((c) => {
-            if (newFlippedCards.includes(c.id) || c.id == card.id) {
-              return { ...c, isFlipped: false };
-            } else {
-              return c;
-            }
+            if (newFlippedCards.includes(c.id) || c.id == card.id) return { ...c, isFlipped: false };
+            else return c;
           });
 
           setCards(flippedBackCard);

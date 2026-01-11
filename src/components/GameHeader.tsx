@@ -1,6 +1,7 @@
 interface GameHedeaderProps {
   score: number;
   moves: number;
+  reInitializeGame : () => void;
 }
 
 const GameHeader = (props: GameHedeaderProps) => {
@@ -17,6 +18,8 @@ const GameHeader = (props: GameHedeaderProps) => {
           <span className="stat-value">{props.moves}</span>
         </div>
       </div>
+            <button className='reset-btn' onClick={props.reInitializeGame}>New game</button>
+
     </div>
   );
 };

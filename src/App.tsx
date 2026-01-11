@@ -16,6 +16,10 @@ function App() {
   const [cards, setCards] = useState<CardsInterface[]>([]);
   const [flippedCards, setFlippedCards] = useState<number[]>([]);
   const [matchedCards, setMatchedCards] = useState<CardsInterface[]>([]);
+  const [isLocked, setLocked] = useState<boolean>(false);
+  const [score, setScore] = useState<number>(0);
+  const [moves, setMoves] = useState<number>(0);
+
 
   const initializeGame = () => {
     const finalCards: CardsInterface[] = cardValues.map((value, index) => ({
@@ -25,8 +29,13 @@ function App() {
       isMatched: false,
     }));
 
-    console.log(finalCards);
     setCards(finalCards);
+
+    setMoves(0);
+    setScore(0);
+    isLocked(false);
+    setMatchedCards([]);
+    setFlippedCards([]);
   };
 
   useEffect(() => {
@@ -34,9 +43,7 @@ function App() {
   }, []);
 
   const handleCardClick = (card: object) => {
-    if (card.isFlipped || card.isMatched) {
-      return;
-    }
+    if (card.isFlipped || card.isMatched || isLocked || flippedCards.length == 2) return;
 
     const newCards: CardsInterface[] = cards.map((c) => {
       if (card.id == c.id) {
@@ -57,7 +64,8 @@ function App() {
       if (firstCard.value == card.value) {
         setTimeout(() => {
           setMatchedCards((prev) => [...prev, firstCard.id, card.id]);
-          setCards((prev) => 
+          setScore((prev) => prev + 1);
+          setCards((prev) =>
             prev.map((c) => {
               if (c.id == card.id || c.id == firstCard.id) {
                 return { ...c, isMatched: true };
@@ -67,6 +75,7 @@ function App() {
             })
           );
           setFlippedCards([]);
+          setLocked(false);
         }, 500);
       } else {
         setTimeout(() => {
@@ -80,14 +89,19 @@ function App() {
 
           setCards(flippedBackCard);
           setFlippedCards([]);
+          setLocked(false);
         }, 1000);
       }
+
+      setMoves((prev) => prev + 1);
     }
   };
 
+   
+
   return (
     <div className="app">
-      <GameHeader score={3} moves={10} />
+      <GameHeader score={score} moves={moves} reInitializeGame={initializeGame} />
       <div className="cards-grid">{cards && cards.map((card) => <Card card={card} onClick={handleCardClick} />)} </div>
     </div>
   );

@@ -96,7 +96,7 @@ export const useGameLogic = (cardValues: string[]) => {
             else return c;
           });
 
-          setCards(flippedBackCard);
+          setCards(flippedBackCard); 
           setFlippedCards([]);
           setLocked(false);
         }, 1000);

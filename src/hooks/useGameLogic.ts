@@ -14,15 +14,15 @@ export const useGameLogic = (cardValues: string[]) => {
   const [isLocked, setLocked] = useState<boolean>(false);
   const [score, setScore] = useState<number>(0);
   const [moves, setMoves] = useState<number>(0);
+  const [time, setTime] = useState<number>(0);
+  const [isRunning, setIsRunning] = useState<boolean>(false);
 
   const shuffleArr = (arr: string[]): string[] => {
-    const shuffled: string[] = [...arr];
-
-    for (let i: number = shuffled.length - 1; i > 0; i--) {
+    for (let i: number = arr.length - 1; i > 0; i--) {
       const j: number = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      [arr[i], arr[j]] = [arr[j], arr[i]];
     }
-    return shuffled;
+    return arr;
   };
 
   const initializeGame = () => {
@@ -40,13 +40,28 @@ export const useGameLogic = (cardValues: string[]) => {
     setLocked(false);
     setMatchedCards([]);
     setFlippedCards([]);
+    setTime(0);
+    setIsRunning(false);
   };
 
   useEffect(() => {
     initializeGame();
   }, []);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTime(prev => prev + 1);
+    }, 1000);
+
+    if (!isRunning) {
+      clearInterval(interval)
+      return;
+    }
+  return () => clearInterval(interval);
+}, [isRunning]);
+
   const handleCardClick = (card: CardsInterface) => {
+    if (!isRunning) setIsRunning(true);
     if (card.isFlipped || card.isMatched || isLocked || flippedCards.length == 2) return;
 
     const newCards: CardsInterface[] = cards.map((c) => {
@@ -56,7 +71,7 @@ export const useGameLogic = (cardValues: string[]) => {
 
     setCards(newCards);
 
-    const newFlippedCards = [...flippedCards, card.id];
+    const newFlippedCards = [...flippedCards, card.id];  
     setFlippedCards(newFlippedCards);
 
     if (flippedCards.length == 1) {
@@ -70,8 +85,7 @@ export const useGameLogic = (cardValues: string[]) => {
             prev.map((c) => {
               if (c.id == card.id || c.id == firstCard.id) return { ...c, isMatched: true };
               else return c;
-            })
-          );
+            }));
           setFlippedCards([]);
           setLocked(false);
         }, 500);
@@ -93,6 +107,10 @@ export const useGameLogic = (cardValues: string[]) => {
   };
 
   const isGameComplete = matchedCards.length == cardValues.length;
+  useEffect(() => {
+    if(isGameComplete) setIsRunning(false);
+  },[cardValues.length,matchedCards.length])
+  console.log('hai')
 
   return {
     cards,
@@ -101,5 +119,6 @@ export const useGameLogic = (cardValues: string[]) => {
     isGameComplete,
     initializeGame,
     handleCardClick,
+    time,
   };
 };

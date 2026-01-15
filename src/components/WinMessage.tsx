@@ -1,8 +1,20 @@
-const WinMessage = ({ moves,timer }: { moves: number, timer : string }) => {
+
+import { useEffect } from "react";
+
+interface TimerInterface {
+  timeInString : string,
+  min : number,
+  second : number
+}
+
+const WinMessage = ({ moves,timer,notify }: { moves: number, timer : TimerInterface ,notify : () => {} }) => {
+
+  useEffect(() => {
+    notify()
+  },[])
   return (
-    <div className="win-message">
-      <h2>Congratulations!</h2>
-      <p>You completed the game in : {moves} moves and time with : {timer} !</p>
+    <div className="win-message">  
+      <p className="notify">You completed the game in : {moves} moves and with : {timer.min > 0 ? `${timer.min} Minutes` : `${timer.second} Seconds`} !</p>
     </div>
   );
 };

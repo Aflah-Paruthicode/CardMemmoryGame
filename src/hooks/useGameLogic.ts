@@ -7,6 +7,11 @@ interface CardsInterface {
   isMatched: boolean;
 }
 
+interface HighScoreInterface {
+  bestMoves : number;
+  bestTime : string;
+}
+
 export const useGameLogic = (cardValues: string[]) => {
   const [cards, setCards] = useState<CardsInterface[]>([]);
   const [flippedCards, setFlippedCards] = useState<number[]>([]);
@@ -16,6 +21,7 @@ export const useGameLogic = (cardValues: string[]) => {
   const [moves, setMoves] = useState<number>(0);
   const [time, setTime] = useState<number>(0);
   const [isRunning, setIsRunning] = useState<boolean>(false);
+  const [isHighScore, setIsHighScore] = useState< HighScoreInterface | null >(null);
 
   const shuffleArr = (arr: string[]): string[] => {
     for (let i: number = arr.length - 1; i > 0; i--) {
@@ -46,19 +52,22 @@ export const useGameLogic = (cardValues: string[]) => {
 
   useEffect(() => {
     initializeGame();
+
+    const isStored : string | null = localStorage.getItem("highScore");
+    if (isStored) setIsHighScore(JSON.parse(isStored));
   }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setTime(prev => prev + 1);
+      setTime((prev) => prev + 1);
     }, 1000);
 
     if (!isRunning) {
-      clearInterval(interval)
+      clearInterval(interval);
       return;
     }
-  return () => clearInterval(interval);
-}, [isRunning]);
+    return () => clearInterval(interval);
+  }, [isRunning]);
 
   const handleCardClick = (card: CardsInterface) => {
     if (!isRunning) setIsRunning(true);
@@ -71,7 +80,7 @@ export const useGameLogic = (cardValues: string[]) => {
 
     setCards(newCards);
 
-    const newFlippedCards = [...flippedCards, card.id];  
+    const newFlippedCards = [...flippedCards, card.id];
     setFlippedCards(newFlippedCards);
 
     if (flippedCards.length == 1) {
@@ -85,7 +94,8 @@ export const useGameLogic = (cardValues: string[]) => {
             prev.map((c) => {
               if (c.id == card.id || c.id == firstCard.id) return { ...c, isMatched: true };
               else return c;
-            }));
+            })
+          );
           setFlippedCards([]);
           setLocked(false);
         }, 500);
@@ -96,7 +106,7 @@ export const useGameLogic = (cardValues: string[]) => {
             else return c;
           });
 
-          setCards(flippedBackCard); 
+          setCards(flippedBackCard);
           setFlippedCards([]);
           setLocked(false);
         }, 1000);
@@ -108,9 +118,9 @@ export const useGameLogic = (cardValues: string[]) => {
 
   const isGameComplete = matchedCards.length == cardValues.length;
   useEffect(() => {
-    if(isGameComplete) setIsRunning(false);
-  },[cardValues.length,matchedCards.length])
-  console.log('hai')
+    if (isGameComplete) setIsRunning(false);
+  }, [cardValues.length, matchedCards.length]);
+  console.log("hai");
 
   return {
     cards,
@@ -120,5 +130,7 @@ export const useGameLogic = (cardValues: string[]) => {
     initializeGame,
     handleCardClick,
     time,
+    setIsHighScore,
+    isHighScore,
   };
 };

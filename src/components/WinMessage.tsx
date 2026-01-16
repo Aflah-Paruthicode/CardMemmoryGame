@@ -1,16 +1,24 @@
 
 import { useEffect } from "react";
+import { useNewHighScore } from "../hooks/useNewHighScore";
+
+interface HighScoreInterface {
+  bestMoves: number;
+  bestTime: string;
+}
 
 interface TimerInterface {
   timeInString : string,
   min : number,
-  second : number
+  second : number,
 }
 
-const WinMessage = ({ moves,timer,notify }: { moves: number, timer : TimerInterface ,notify : () => {} }) => {
+const WinMessage = ({ moves,timer,notify,setNewHighScore,highScoreNotify }: { moves: number, timer : TimerInterface ,notify : () => {},highScoreNotify : () => {} ,setNewHighScore : React.Dispatch<React.SetStateAction<HighScoreInterface | null>>}) => {
 
   useEffect(() => {
-    notify()
+    let isNewHighscore : boolean = useNewHighScore(setNewHighScore,moves,timer);
+    if(isNewHighscore) highScoreNotify();
+    notify();
   },[])
   return (
     <div className="win-message">  

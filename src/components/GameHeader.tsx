@@ -5,6 +5,7 @@ interface TimerInterface {
   second : number
 }
 
+
 interface GameHedeaderProps {
   score: number;
   moves: number;

@@ -1,11 +1,13 @@
 import "./App.css";
 import Card from "./components/Card";
+import Footer from "./components/Footer";
 import GameHeader from "./components/GameHeader";
 import Navbar from "./components/Navbar";
 import WinMessage from "./components/WinMessage";
 import { useGameLogic } from "./hooks/useGameLogic";
 import { formatTime } from "./hooks/useTimeFormat";
 import toast, { Toaster } from "react-hot-toast";
+import MuteBtn from "./components/MuteBtn";
 
 interface TimerInterface {
   timeInString: string;
@@ -13,12 +15,13 @@ interface TimerInterface {
   second: number;
 }
 
-const cardValues: string[] = ["🍑", "🍒", "🍑", "🍒"];
+const cardValues: string[] = ["🍎", "🍉", "🍍", "🍌", "🍇", "🍊", "🍓", "🥝", "🍑", "🍒", "🍎", "🍉", "🍍", "🍌", "🍇", "🍊", "🍓", "🥝", "🍑", "🍒"];
 const gameFinishedNotify = () => toast("Congratulations!", { icon: "👏", style: { borderRadius: "10px", background: "#0a0a0a", color: "#fff" } });
 const newHighScoreNotify = () => toast("New High Score!!!", { icon: "🥳🎉", style: { borderRadius: "10px", background: "#0a0a0a", color: "#fff" } });
 
 function App() {
-  const { cards, handleCardClick, initializeGame, isGameComplete, moves, score, time, setIsHighScore, isHighScore } = useGameLogic(cardValues);
+  const { cards, handleCardClick, initializeGame, isGameComplete, moves, score, time, setIsHighScore, isHighScore, soundEnabled, setSoundEnabled } =
+    useGameLogic(cardValues);
 
   let timer: TimerInterface = formatTime(time);
 
@@ -35,6 +38,8 @@ function App() {
         )}
         <div className="cards-grid">{cards && cards.map((card, ind) => <Card key={ind} card={card} onClick={handleCardClick} />)} </div>
       </div>
+      <MuteBtn isSound={soundEnabled} setSound={setSoundEnabled} />
+      <Footer />
     </div>
   );
 }

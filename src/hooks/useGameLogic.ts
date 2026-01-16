@@ -23,11 +23,13 @@ export const useGameLogic = (cardValues: string[]) => {
   const [time, setTime] = useState<number>(0);
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const [isHighScore, setIsHighScore] = useState<HighScoreInterface | null>(null);
+  const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
 
-  const playFlip = useSound("/sounds/flipped.mp3");
-  const playWrong = useSound('/sounds/wrong.mp3');
-  const playWon = useSound('/sounds/won.mp3');
-  const playMatched = useSound('/sounds/matched.mp3');
+
+  const playFlip = useSound("/sounds/flipped.mp3",soundEnabled);
+  const playWrong = useSound('/sounds/wrong.mp3',soundEnabled);
+  const playWon = useSound('/sounds/won.mp3',soundEnabled);
+  const playMatched = useSound('/sounds/matched.mp3',soundEnabled);
 
   const shuffleArr = (arr: string[]): string[] => {
     for (let i: number = arr.length - 1; i > 0; i--) {
@@ -59,9 +61,17 @@ export const useGameLogic = (cardValues: string[]) => {
   useEffect(() => {
     initializeGame();
 
+    const savedSound = localStorage.getItem("soundEnabled");
+  if (savedSound !== null) setSoundEnabled(savedSound === "true");
+
+
     const isStored: string | null = localStorage.getItem("highScore");
     if (isStored) setIsHighScore(JSON.parse(isStored));
   }, []);
+
+  useEffect(() => {
+  localStorage.setItem("soundEnabled", String(soundEnabled));
+}, [soundEnabled]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -144,5 +154,7 @@ export const useGameLogic = (cardValues: string[]) => {
     time,
     setIsHighScore,
     isHighScore,
+    soundEnabled,
+    setSoundEnabled
   };
 };

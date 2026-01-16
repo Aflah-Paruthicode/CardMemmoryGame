@@ -7,7 +7,6 @@
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   background: #0a0a0a;
-  min-height: 100vh;
   /* padding: 20px; */
   color: #fff;
 }
@@ -32,17 +31,17 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.1);
   background: rgba(15, 23, 42, 0.9);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(6px);
-      margin-top: 10px;
-      padding-right: 5%;
+  backdrop-filter: blur(6px);
+  margin-top: 10px;
+  padding-right: 5%;
 }
 
 .logo {
   margin: auto;
   width: 80px;
   border-radius: 50%;
-  margin-top:  10px;
-  margin-bottom: 10px; 
+  margin-top: 10px;
+  margin-bottom: 10px;
   margin-left: 11px;
 }
 
@@ -60,14 +59,15 @@ body {
 }
 
 .highScore-time {
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 4px;
-    border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 4px;
+  border-radius: 10px;
 }
 
 .app {
   padding-top: 130px;
   display: flex;
+  min-height: 80vh;
   flex-direction: column;
   align-items: center;
   gap: 30px;
@@ -123,6 +123,9 @@ body {
 
 .reset-btn {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  gap: 5px;
   color: white;
   border: none;
   padding: 12px 30px;
@@ -151,6 +154,45 @@ body {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.1);
   animation: slideDown 0.5s ease-out;
+}
+
+#muteBtn {
+  position: fixed;
+  padding-top: 12px;
+  padding-bottom: 11px;
+  padding-left: 14px;
+  padding-right: 14px;
+  cursor: pointer;
+  border-radius: 50%;
+  /* margin: auto; */
+  bottom: 50px;
+  background: rgba(15, 23, 42, 0.95);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+footer {
+  width: 100%;
+  min-height: 200px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(15, 23, 42, 0.9);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  border-top-left-radius: 26px;
+  border-top-right-radius: 26px;
+  text-align: center;
+  margin-top: 30px;
+}
+
+.footerText {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 165px;
 }
 
 @keyframes slideDown {
@@ -253,6 +295,10 @@ body {
     font-size: 2rem;
   }
 
+  .logo {
+    width: 60px;
+  }
+
   .cards-grid {
     gap: 10px;
   }
@@ -278,6 +324,12 @@ body {
 @media (max-width: 480px) {
   .game-header {
     padding: 20px;
+    width: 98%;
+  }
+
+  #navbar {
+    width: 95%;
+    margin-left: 2.5%;
   }
 
   .game-header h1 {
@@ -291,5 +343,14 @@ body {
 
   .card-back {
     font-size: 2.5rem;
+  }
+
+  .footerText {
+    max-width: 95%;
+    gap: 6px;
+  }
+  .footerText p {
+      color: #a1a1aa;
+
   }
 }

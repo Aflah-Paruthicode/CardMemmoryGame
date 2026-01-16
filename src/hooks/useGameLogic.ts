@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSound } from "./useSound";
 
 interface CardsInterface {
   id: number;
@@ -8,8 +9,8 @@ interface CardsInterface {
 }
 
 interface HighScoreInterface {
-  bestMoves : number;
-  bestTime : string;
+  bestMoves: number;
+  bestTime: string;
 }
 
 export const useGameLogic = (cardValues: string[]) => {
@@ -21,7 +22,12 @@ export const useGameLogic = (cardValues: string[]) => {
   const [moves, setMoves] = useState<number>(0);
   const [time, setTime] = useState<number>(0);
   const [isRunning, setIsRunning] = useState<boolean>(false);
-  const [isHighScore, setIsHighScore] = useState< HighScoreInterface | null >(null);
+  const [isHighScore, setIsHighScore] = useState<HighScoreInterface | null>(null);
+
+  const playFlip = useSound("/sounds/flipped.mp3");
+  const playWrong = useSound('/sounds/wrong.mp3');
+  const playWon = useSound('/sounds/won.mp3');
+  const playMatched = useSound('/sounds/matched.mp3');
 
   const shuffleArr = (arr: string[]): string[] => {
     for (let i: number = arr.length - 1; i > 0; i--) {
@@ -53,7 +59,7 @@ export const useGameLogic = (cardValues: string[]) => {
   useEffect(() => {
     initializeGame();
 
-    const isStored : string | null = localStorage.getItem("highScore");
+    const isStored: string | null = localStorage.getItem("highScore");
     if (isStored) setIsHighScore(JSON.parse(isStored));
   }, []);
 
@@ -72,7 +78,8 @@ export const useGameLogic = (cardValues: string[]) => {
   const handleCardClick = (card: CardsInterface) => {
     if (!isRunning) setIsRunning(true);
     if (card.isFlipped || card.isMatched || isLocked || flippedCards.length == 2) return;
-
+    
+    playFlip();
     const newCards: CardsInterface[] = cards.map((c) => {
       if (card.id == c.id) return { ...c, isFlipped: true };
       else return c;
@@ -87,6 +94,7 @@ export const useGameLogic = (cardValues: string[]) => {
       const firstCard = cards[flippedCards[0]];
 
       if (firstCard.value == card.value) {
+        playMatched();
         setTimeout(() => {
           setMatchedCards((prev) => [...prev, firstCard.id, card.id]);
           setScore((prev) => prev + 1);
@@ -100,6 +108,7 @@ export const useGameLogic = (cardValues: string[]) => {
           setLocked(false);
         }, 500);
       } else {
+        playWrong();
         setTimeout(() => {
           const flippedBackCard: CardsInterface[] = newCards.map((c) => {
             if (newFlippedCards.includes(c.id) || c.id == card.id) return { ...c, isFlipped: false };
@@ -118,7 +127,10 @@ export const useGameLogic = (cardValues: string[]) => {
 
   const isGameComplete = matchedCards.length == cardValues.length;
   useEffect(() => {
-    if (isGameComplete) setIsRunning(false);
+    if (isGameComplete) {
+      setIsRunning(false);
+      playWon();
+    }
   }, [cardValues.length, matchedCards.length]);
   console.log("hai");
 

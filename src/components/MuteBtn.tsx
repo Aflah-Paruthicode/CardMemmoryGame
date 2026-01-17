@@ -1,7 +1,6 @@
 import React from "react";
 
 const MuteBtn = ({ isSound, setSound }: { isSound: boolean; setSound: React.Dispatch<React.SetStateAction<boolean>> }) => {
-  console.log(isSound);
   const handleSetSound = () => {
     setSound((prev) => !prev);
   };

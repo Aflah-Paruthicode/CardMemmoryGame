@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSound } from "./useSound";
+import { useShuffleArr } from "./useShuffleCards";
 
 interface CardsInterface {
   id: number;
@@ -31,16 +32,9 @@ export const useGameLogic = (cardValues: string[]) => {
   const playWon = useSound('/sounds/won.mp3',soundEnabled);
   const playMatched = useSound('/sounds/matched.mp3',soundEnabled);
 
-  const shuffleArr = (arr: string[]): string[] => {
-    for (let i: number = arr.length - 1; i > 0; i--) {
-      const j: number = Math.floor(Math.random() * (i + 1));
-      [arr[i], arr[j]] = [arr[j], arr[i]];
-    }
-    return arr;
-  };
 
   const initializeGame = () => {
-    const shuffled = shuffleArr(cardValues);
+    const shuffled = useShuffleArr(cardValues);
     const finalCards: CardsInterface[] = shuffled.map((value, index) => ({
       id: index,
       value,
@@ -106,13 +100,13 @@ export const useGameLogic = (cardValues: string[]) => {
       if (firstCard.value == card.value) {
         playMatched();
         setTimeout(() => {
-          setMatchedCards((prev) => [...prev, firstCard.id, card.id]);
+          setMatchedCards((prev) => [...prev, firstCard.id, card.id]); 
           setScore((prev) => prev + 1);
           setCards((prev) =>
-            prev.map((c) => {
+            prev.map((c) => { 
               if (c.id == card.id || c.id == firstCard.id) return { ...c, isMatched: true };
               else return c;
-            })
+            }) 
           );
           setFlippedCards([]);
           setLocked(false);
@@ -142,7 +136,6 @@ export const useGameLogic = (cardValues: string[]) => {
       playWon();
     }
   }, [cardValues.length, matchedCards.length]);
-  console.log("hai");
 
   return {
     cards,

@@ -1,7 +1,7 @@
-# A Simple Memmory game  
+# *A Simple Memmory game*   
 
-a modern memory card game built with react and type script.   
-flip cards, find matching pairs, and try to beat your best time.
+*a modern memory card game built with react and type script.*  
+*flip cards, find matching pairs, and try to beat your best time.*
 
 
 
@@ -53,7 +53,7 @@ flip cards, find matching pairs, and try to beat your best time.
 
 ---
 
-Made with love, by Aflah 😊 <br />  
-If you found this repo useful, consider giving it a star ⭐
+*Made with love, by Aflah 😊* <br />
+*If you found this repo useful, consider giving it a star ⭐*
 
 

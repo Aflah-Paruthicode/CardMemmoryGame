@@ -1,4 +1,5 @@
 
+import { useAppContext } from '../context/useAppContext';
 import {LOGO} from '../utils/constants'
 interface HighScoreInterface {
   bestMoves: number;
@@ -6,10 +7,14 @@ interface HighScoreInterface {
 }
 
 const Navbar = ({HighScore}: {HighScore : HighScoreInterface | null}) => {
+  const {name} = useAppContext();
   return (
+    
     <nav id="navbar">
       <div>
-        <img className="logo" src={LOGO} alt="" />
+        {/* <img className="logo" src={LOGO} alt="" /> */}
+        <p>{name}</p>
+
       </div>
       <div className="highScore">
         <h2>Best Score : </h2>

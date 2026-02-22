@@ -1,46 +1,44 @@
-import "./App.css";
-import Card from "./components/Card";
-import Footer from "./components/Footer";
-import GameHeader from "./components/GameHeader";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import SinglePlayerGame from "./pages/SinglePlayerGame";
 import Navbar from "./components/Navbar";
-import WinMessage from "./components/WinMessage";
-import { useGameLogic } from "./hooks/useGameLogic";
-import { formatTime } from "./hooks/useTimeFormat";
-import toast, { Toaster } from "react-hot-toast";
-import MuteBtn from "./components/MuteBtn";
+import Lobby from "./pages/Lobby";
+import Footer from "./components/Footer";
+import { useState } from "react";
+import { createContext } from "react";   
+import { AppContext } from "./context/appContext";
 
-interface TimerInterface {
-  timeInString: string;
-  min: number;
-  second: number;
-}
 
-const cardValues: string[] = ["🍎", "🍉", "🍍", "🍌", "🍇", "🍊", "🍓", "🥝", "🍑", "🍒", "🍎", "🍉", "🍍", "🍌", "🍇", "🍊", "🍓", "🥝", "🍑", "🍒"];
-const gameFinishedNotify = () => toast("Congratulations!", { icon: "👏", style: { borderRadius: "10px", background: "#0a0a0a", color: "#fff" } });
-const newHighScoreNotify = () => toast("New High Score!!!", { icon: "🥳🎉", style: { borderRadius: "10px", background: "#0a0a0a", color: "#fff" } });
+type AppContextType = {
+  name: string | null;
+  setName: React.Dispatch<React.SetStateAction<string | null>>;
+};
 
-function App() {
-  const { cards, handleCardClick, initializeGame, isGameComplete, moves, score, time, setIsHighScore, isHighScore, soundEnabled, setSoundEnabled } =
-    useGameLogic(cardValues);
 
-  let timer: TimerInterface = formatTime(time);
 
+function App() {  
+  
+  const [name, setName] = useState<string | null>(null);   
   return (
-    <div>
-      <Navbar HighScore={isHighScore} />
-      <div className="app">
-        <GameHeader score={score} moves={moves} reInitializeGame={initializeGame} timer={timer} />
-        {isGameComplete && (
-          <div>
-            <Toaster />
-            <WinMessage moves={moves} timer={timer} notify={gameFinishedNotify} highScoreNotify={newHighScoreNotify} setNewHighScore={setIsHighScore} />
-          </div>
-        )}
-        <div className="cards-grid">{cards && cards.map((card, ind) => <Card key={ind} card={card} onClick={handleCardClick} />)} </div>
-      </div>
-      <MuteBtn isSound={soundEnabled} setSound={setSoundEnabled} />
-      <Footer />
-    </div>
+    <AppContext.Provider value={{name,setName}}>
+      <Router>
+        <Navbar HighScore={null} />   
+        <Routes>
+          <Route path="/" element={<Lobby />} />
+
+          <Route path="/singleplayer" element={<SinglePlayerGame />} />
+
+          {/* The Multiplayer Lobby (Waiting for friend) */}
+          {/* <Route path="/lobby/:roomId" element={<MultiplayerLobby />} /> */}
+
+          {/* The Multiplayer Arena (The actual match) */}
+          {/* <Route path="/multiplayer/:roomId" element={<MultiplayerArena />} /> */}
+
+          {/* Global Leaderboard */}
+          {/* <Route path="/leaderboard" element={<Leaderboard />} /> */}
+        </Routes>
+        <Footer />
+      </Router>
+    </AppContext.Provider>
   );
 }
 
